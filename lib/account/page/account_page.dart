@@ -8,6 +8,7 @@ import 'package:flutter_deer/widgets/click_item.dart';
 
 import '../account_router.dart';
 
+/// design/6店铺-账户/index.html#artboard2
 class AccountPage extends StatefulWidget {
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -31,7 +32,7 @@ class _AccountPageState extends State<AccountPage> {
                   margin: const EdgeInsets.symmetric(horizontal: 6.0),
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(ImageUtils.getImgPath("account/bg")),
+                      image: ImageUtils.getAssetImage("account/bg"),
                       fit: BoxFit.fill
                     )
                   ),

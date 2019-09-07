@@ -13,6 +13,7 @@ import 'package:flutter_deer/widgets/pie_chart/pie_chart.dart';
 import 'package:flutter_deer/widgets/pie_chart/pie_data.dart';
 import 'package:flutter_deer/widgets/selected_text.dart';
 
+/// design/5统计/index.html#artboard11
 class GoodsStatisticsPage extends StatefulWidget {
 
   @override
@@ -163,7 +164,7 @@ class _GoodsStatisticsPageState extends State<GoodsStatisticsPage> {
                     borderRadius: BorderRadius.circular(4.0),
                     border: Border.all(color: const Color(0xFFF7F8FA), width: 0.6),
                     image: DecorationImage(
-                        image: AssetImage(ImageUtils.getImgPath("order/icon_goods"))
+                        image: ImageUtils.getAssetImage("order/icon_goods")
                     )
                 ),
               ),

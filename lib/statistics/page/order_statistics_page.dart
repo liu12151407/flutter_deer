@@ -12,6 +12,8 @@ import 'package:flutter_deer/widgets/selected_text.dart';
 import 'package:flutter_deer/widgets/bezier_chart/bezier_chart.dart';
 import 'package:date_utils/date_utils.dart' as Date;
 
+/// design/5统计/index.html#artboard1
+/// design/5统计/index.html#artboard6
 class OrderStatisticsPage extends StatefulWidget {
 
   const OrderStatisticsPage(this.index, {Key key}) : super(key: key);
@@ -152,7 +154,7 @@ class _OrderStatisticsPageState extends State<OrderStatisticsPage> {
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(ImageUtils.getImgPath("statistic/chart_fg")),
+                  image: ImageUtils.getAssetImage("statistic/chart_fg"),
                   fit: BoxFit.fill
               )
           ),
