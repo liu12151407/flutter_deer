@@ -9,6 +9,8 @@ import 'package:flutter_deer/widgets/load_image.dart';
 import 'package:flutter_deer/widgets/my_card.dart';
 import 'package:flutter_deer/widgets/my_flexible_space_bar.dart';
 
+
+/// design/5统计/index.html
 class StatisticsPage extends StatefulWidget {
   @override
   _StatisticsPageState createState() => _StatisticsPageState();
@@ -52,7 +54,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             DecoratedBox(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(ImageUtils.getImgPath("statistic/statistic_bg1")),
+                      image: ImageUtils.getAssetImage("statistic/statistic_bg1"),
                       fit: BoxFit.fill
                   )
               ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/routers/application.dart';
@@ -10,6 +11,10 @@ import 'package:oktoast/oktoast.dart';
 import 'package:flutter_deer/home/splash_page.dart';
 
 void main(){
+//  debugProfileBuildsEnabled = true;
+//  debugPaintLayerBordersEnabled = true;
+//  debugProfilePaintsEnabled = true;
+  
   runApp(MyApp());
   // 透明状态栏
   if (Platform.isAndroid) {
@@ -32,6 +37,7 @@ class MyApp extends StatelessWidget {
     return OKToast(
       child: MaterialApp(
         title: 'Flutter Deer',
+//        showPerformanceOverlay: true, //显示性能标签
         //debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: Colours.app_main,
@@ -44,10 +50,10 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: [
-          const Locale('zh', 'CH'),
-          const Locale('en', 'US')
-        ]      
+        supportedLocales: const [
+          Locale('zh', 'CH'),
+          Locale('en', 'US')
+        ]
       ),
       backgroundColor: Colors.black54,
       textPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
