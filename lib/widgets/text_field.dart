@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_deer/res/resources.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
@@ -22,7 +23,8 @@ class MyTextField extends StatefulWidget {
     this.focusNode,
     this.isInputPwd: false,
     this.getVCode,
-    this.config
+    this.config,
+    this.keyName
   }): super(key: key);
 
   final TextEditingController controller;
@@ -34,6 +36,8 @@ class MyTextField extends StatefulWidget {
   final bool isInputPwd;
   final Future<bool> Function() getVCode;
   final KeyboardActionsConfig config;
+  /// 用于集成测试寻找widget
+  final String keyName;
   
   @override
   _MyTextFieldState createState() => _MyTextFieldState();
@@ -95,42 +99,51 @@ class _MyTextFieldState extends State<MyTextField> {
     return Stack(
       alignment: Alignment.centerRight,
       children: <Widget>[
-        TextField(
-          style: TextStyles.textDark14,
-          focusNode: widget.focusNode,
-          maxLength: widget.maxLength,
-          obscureText: widget.isInputPwd ? !_isShowPwd : false,
-          autofocus: widget.autoFocus,
-          controller: widget.controller,
-          textInputAction: TextInputAction.done,
-          keyboardType: widget.keyboardType,
-          // 数字、手机号限制格式为0到9(白名单)， 密码限制不包含汉字（黑名单）
-          inputFormatters: (widget.keyboardType == TextInputType.number || widget.keyboardType == TextInputType.phone) ? 
-          [WhitelistingTextInputFormatter(RegExp("[0-9]"))] : [BlacklistingTextInputFormatter(RegExp("[\u4e00-\u9fa5]"))],
-          decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
-              hintText: widget.hintText,
-              hintStyle: TextStyles.textGray14,
-              counterText: "",
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colours.app_main,
-                      width: 0.8
-                  )
-              ),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colours.line,
-                      width: 0.8
-                  )
-              )
+        Localizations(
+          locale: const Locale("en", ""),
+          delegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          child: TextField(
+            style: TextStyles.textDark14,
+            focusNode: widget.focusNode,
+            maxLength: widget.maxLength,
+            obscureText: widget.isInputPwd ? !_isShowPwd : false,
+            autofocus: widget.autoFocus,
+            controller: widget.controller,
+            textInputAction: TextInputAction.done,
+            keyboardType: widget.keyboardType,
+            // 数字、手机号限制格式为0到9(白名单)， 密码限制不包含汉字（黑名单）
+            inputFormatters: (widget.keyboardType == TextInputType.number || widget.keyboardType == TextInputType.phone) ? 
+            [WhitelistingTextInputFormatter(RegExp("[0-9]"))] : [BlacklistingTextInputFormatter(RegExp("[\u4e00-\u9fa5]"))],
+            decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
+                hintText: widget.hintText,
+                hintStyle: TextStyles.textGray14,
+                counterText: "",
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colours.app_main,
+                        width: 0.8
+                    )
+                ),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colours.line,
+                        width: 0.8
+                    )
+                )
+            ),
           ),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             _isShowDelete ? Gaps.empty : GestureDetector(
-              child: const LoadAssetImage("login/qyg_shop_icon_delete",
+              child: LoadAssetImage("login/qyg_shop_icon_delete",
+                key: Key('${widget.keyName}_delete'),
                 width: 18.0,
                 height: 18.0,
               ),
@@ -142,6 +155,7 @@ class _MyTextFieldState extends State<MyTextField> {
             !widget.isInputPwd ? Gaps.empty : GestureDetector(
               child: LoadAssetImage(
                 _isShowPwd ? "login/qyg_shop_icon_display" : "login/qyg_shop_icon_hide",
+                key: Key('${widget.keyName}_showPwd'),
                 width: 18.0,
                 height: 18.0,
               ),

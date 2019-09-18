@@ -10,6 +10,8 @@ import 'package:flutter_deer/widgets/search_bar.dart';
 import 'package:flutter_deer/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
 
+
+/// design/3订单/index.html#artboard8
 class OrderSearchPage extends StatefulWidget {
   @override
   OrderSearchPageState createState() => OrderSearchPageState();
@@ -51,6 +53,7 @@ class OrderSearchPageState extends BasePageState<OrderSearchPage, OrderSearchPre
         body: Consumer<BaseListProvider<SearchItem>>(
           builder: (_, provider, __) {
             return DeerListView(
+              keyName: 'order_search_list',
               itemCount: provider.list.length,
               stateType: provider.stateType,
               onRefresh: _onRefresh,

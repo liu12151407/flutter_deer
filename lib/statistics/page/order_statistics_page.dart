@@ -10,7 +10,7 @@ import 'package:flutter_deer/widgets/load_image.dart';
 import 'package:flutter_deer/widgets/my_card.dart';
 import 'package:flutter_deer/widgets/selected_text.dart';
 import 'package:flutter_deer/widgets/bezier_chart/bezier_chart.dart';
-import 'package:date_utils/date_utils.dart' as Date;
+import 'package:flutter_deer/util/date_utils_.dart' as Date;
 
 /// design/5统计/index.html#artboard1
 /// design/5统计/index.html#artboard6
@@ -72,15 +72,48 @@ class _OrderStatisticsPageState extends State<OrderStatisticsPage> {
               Row(
                 children: <Widget>[
                   Gaps.hGap16,
-                  _buildSelectedText(_initialDay.year.toString(), 0),
+                  SelectedText(
+                    _initialDay.year.toString(),
+                    key: const Key('year'),
+                    fontSize: 15.0,
+                    selected: _selectedIndex == 0,
+                    unSelectedTextColor: Colours.text_normal,
+                    onTap: (){
+                      setState(() {
+                        _selectedIndex = 0;
+                      });
+                    },
+                  ),
                   Gaps.hGap12,
                   Container(width: 0.6, height: 24.0, color: Colours.line),
                   Gaps.hGap12,
-                  _buildSelectedText("${_initialDay.month.toString()}月", 1),
+                  SelectedText(
+                    "${_initialDay.month.toString()}月",
+                    key: const Key('month'),
+                    fontSize: 15.0,
+                    selected: _selectedIndex == 1,
+                    unSelectedTextColor: Colours.text_normal,
+                    onTap: (){
+                      setState(() {
+                        _selectedIndex = 1;
+                      });
+                    },
+                  ),
                   Gaps.hGap12,
                   Container(width: 0.6, height: 24.0, color: Colours.line),
                   Gaps.hGap12,
-                  _buildSelectedText("${DateUtils.previousWeek(_initialDay)} -${DateUtils.apiDayFormat(_initialDay)}", 2),
+                  SelectedText(
+                    "${DateUtils.previousWeek(_initialDay)} -${DateUtils.apiDayFormat(_initialDay)}",
+                    key: const Key('day'),
+                    fontSize: 15.0,
+                    selected: _selectedIndex == 2,
+                    unSelectedTextColor: Colours.text_normal,
+                    onTap: (){
+                      setState(() {
+                        _selectedIndex = 2;
+                      });
+                    },
+                  ),
                 ],
               ),
               Gaps.vGap16,
@@ -319,19 +352,5 @@ class _OrderStatisticsPageState extends State<OrderStatisticsPage> {
       );       
     });
     return dayWidgets;
-  }
-  
-  _buildSelectedText(String text, int index){
-    return SelectedText(
-      text,
-      fontSize: 15.0,
-      selected: _selectedIndex == index,
-      unSelectedTextColor: Colours.text_normal,
-      onTap: (){
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-    );
   }
 }

@@ -10,6 +10,8 @@ import 'package:flutter_deer/widgets/my_button.dart';
 import 'package:flutter_deer/widgets/text_field.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
+
+/// design/1注册登录/index.html#artboard11
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -58,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
   
   void _register(){
-    Toast.show("确认......");
+    Toast.show("点击注册");
   }
 
   @override
@@ -87,6 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           Gaps.vGap16,
           MyTextField(
+            key: const Key('phone'),
             focusNode: _nodeText1,
             config: _config,
             controller: _nameController,
@@ -96,6 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           Gaps.vGap8,
           MyTextField(
+            key: const Key('vcode'),
             focusNode: _nodeText2,
             controller: _vCodeController,
             keyboardType: TextInputType.number,
@@ -114,6 +118,8 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           Gaps.vGap8,
           MyTextField(
+            key: const Key('password'),
+            keyName: 'password',
             focusNode: _nodeText3,
             isInputPwd: true,
             controller: _passwordController,
@@ -123,6 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Gaps.vGap10,
           Gaps.vGap15,
           MyButton(
+            key: const Key('register'),
             onPressed: _isClick ? _register : null,
             text: "注册",
           )

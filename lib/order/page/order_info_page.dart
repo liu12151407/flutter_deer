@@ -9,6 +9,8 @@ import 'package:flutter_deer/widgets/load_image.dart';
 
 import '../order_router.dart';
 
+
+/// design/3订单/index.html#artboard10
 class OrderInfoPage extends StatefulWidget {
   @override
   _OrderInfoPageState createState() => _OrderInfoPageState();
@@ -28,6 +30,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       body: Stack(
         children: <Widget>[
           SingleChildScrollView(
+            key: const Key('order_info'),
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Stack(
                 children: <Widget>[

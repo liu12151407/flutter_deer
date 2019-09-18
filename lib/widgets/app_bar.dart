@@ -1,5 +1,4 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_deer/res/resources.dart';
@@ -59,6 +58,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget{
                   FocusScope.of(context).unfocus();
                   Navigator.maybePop(context);
                 },
+                tooltip: 'Back',
                 padding: const EdgeInsets.all(12.0),
                 icon: Image.asset(
                   backImg,
@@ -76,7 +76,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget{
                   ),
                   child: actionName.isEmpty ? Container() :
                   FlatButton(
-                    child: Text(actionName),
+                    child: Text(actionName, key: const Key('actionName')),
                     textColor: _overlayStyle == SystemUiOverlayStyle.light ? Colors.white : Colours.text_dark,
                     highlightColor: Colors.transparent,
                     onPressed: onPressed,
