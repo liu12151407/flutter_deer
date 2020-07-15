@@ -15,7 +15,7 @@ class _AddressSelectPageState extends State<AddressSelectPage> {
   
   List<PoiSearch> _list = [];
   int _index = 0;
-  ScrollController _controller = new ScrollController();
+  final ScrollController _controller = ScrollController();
   AMap2DController _aMap2DController;
 
   @override
@@ -29,7 +29,7 @@ class _AddressSelectPageState extends State<AddressSelectPage> {
     super.initState();
     /// iOS配置key
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      Flutter2dAMap.setApiKey("4327916279bf45a044bb53b947442387");
+      Flutter2dAMap.setApiKey('4327916279bf45a044bb53b947442387');
     }
   }
   
@@ -38,93 +38,115 @@ class _AddressSelectPageState extends State<AddressSelectPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: SearchBar(
-        hintText: "搜索地址",
-        onPressed: (text){
+        hintText: '搜索地址',
+        onPressed: (text) {
           _controller.animateTo(0.0, duration: Duration(milliseconds: 10), curve: Curves.ease);
           _index = 0;
-          if (_aMap2DController != null){
+          if (_aMap2DController != null) {
             _aMap2DController.search(text);
           }
         },
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 9,
-            child: AMap2DView(
-              onPoiSearched: (result){
-                _controller.animateTo(0.0, duration: Duration(milliseconds: 10), curve: Curves.ease);
-                _index = 0;
-                _list = result;
-                setState(() {
-                 
-                });
-              },
-              onAMap2DViewCreated: (controller){
-                _aMap2DController = controller;
-              },
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 9,
+              child: AMap2DView(
+                webKey: '4e479545913a3a180b3cffc267dad646',
+                onPoiSearched: (result) {
+                  _controller.animateTo(0.0, duration: Duration(milliseconds: 10), curve: Curves.ease);
+                  _index = 0;
+                  _list = result;
+                  setState(() {
+                   
+                  });
+                },
+                onAMap2DViewCreated: (controller) {
+                  _aMap2DController = controller;
+                },
+              ),
             ),
-          ),
-          Expanded(
-            flex: 11,
-            child: 
+            Expanded(
+              flex: 11,
+              child: 
 //            _list.isEmpty ? 
 //              Container(
 //                alignment: Alignment.center,
 //                child: CircularProgressIndicator(),
 //              ) : 
-            ListView.separated(
+              ListView.separated(
                 controller: _controller,
-                shrinkWrap: true,
                 itemCount: _list.length,
-                separatorBuilder: (_, index) {
-                  return Divider(height: 0.6);
-                },
-                itemBuilder: (_, index){
-                  return InkWell(
-                    onTap: (){
+                separatorBuilder: (_, index) => const Divider(),
+                itemBuilder: (_, index) {
+                  return _AddressItem(
+                    isSelected: _index == index,
+                    date: _list[index],
+                    onTap: () {
                       _index = index;
-                      if (_aMap2DController != null){
+                      if (_aMap2DController != null) {
                         _aMap2DController.move(_list[index].latitude, _list[index].longitude);
                       }
                       setState(() {
                       });
                     },
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      height: 50.0,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              _list[index].provinceName + " " +
-                                  _list[index].cityName + " " +
-                                  _list[index].adName + " " +
-                                  _list[index].title,
-                            ),
-                          ),
-                          Opacity(
-                              opacity: _index == index ? 1 : 0,
-                              child: Icon(Icons.done, color: Colors.blue)
-                          )
-                        ],
-                      ),
-                    ),
                   );
-                }
+                },
+              ),
             ),
-          ),
-          SafeArea(
-            child: MyButton(
-              onPressed: (){
+            MyButton(
+              onPressed: () {
                 NavigatorUtils.goBackWithParams(context, _list[_index]);
               },
-              text: "确认选择地址",
-            ),
-          )
-        ],
+              text: '确认选择地址',
+            )
+          ],
+        ),
       ),
     );
   }
 }
+
+class _AddressItem extends StatelessWidget {
+
+  const _AddressItem({
+    Key key,
+    @required this.date,
+    this.isSelected = false,
+    this.onTap,
+  }) : super(key: key);
+
+  final PoiSearch date;
+  final bool isSelected;
+  final GestureTapCallback onTap;
+  
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        height: 50.0,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                date.provinceName + ' ' +
+                date.cityName + ' ' +
+                date.adName + ' ' +
+                date.title,
+              ),
+            ),
+            Visibility(
+              visible: isSelected,
+              child: const Icon(Icons.done, color: Colors.blue),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+

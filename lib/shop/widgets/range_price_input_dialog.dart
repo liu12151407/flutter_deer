@@ -1,14 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
 import 'package:flutter_deer/util/number_text_input_formatter.dart';
+import 'package:flutter_deer/util/theme_utils.dart';
 import 'package:flutter_deer/util/toast.dart';
 import 'package:flutter_deer/widgets/base_dialog.dart';
 
 /// design/7店铺-店铺配置/index.html#artboard1
-class RangePriceInputDialog extends StatefulWidget{
+class RangePriceInputDialog extends StatefulWidget {
 
   RangePriceInputDialog({
     Key key,
@@ -24,10 +24,17 @@ class RangePriceInputDialog extends StatefulWidget{
   
 }
 
-class _RangePriceInputDialog extends State<RangePriceInputDialog>{
+class _RangePriceInputDialog extends State<RangePriceInputDialog> {
 
-  TextEditingController _controller = TextEditingController();
-  TextEditingController _controller1 = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller1 = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _controller1.dispose();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -37,7 +44,7 @@ class _RangePriceInputDialog extends State<RangePriceInputDialog>{
         height: 34.0,
         margin: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 0.0),
         decoration: BoxDecoration(
-          color: Colours.bg_gray,
+          color: ThemeUtils.getDialogTextFieldColor(context),
           borderRadius: BorderRadius.circular(2.0),
         ),
         child: Row(
@@ -45,51 +52,52 @@ class _RangePriceInputDialog extends State<RangePriceInputDialog>{
             Expanded(
               child: TextField(
                 autofocus: true,
-                style: TextStyles.textDark14,
+                //style: TextStyles.textDark14,
                 controller: _controller,
                 maxLines: 1,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 // 金额限制数字格式
                 inputFormatters: [UsNumberTextInputFormatter()],
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(top: 4.0, left: 16.0, right: 16.0, bottom: 4.0),
+                  contentPadding: const EdgeInsets.only(top: 0.0, left: 16.0, right: 16.0, bottom: 14.0),
                   border: InputBorder.none,
-                  hintStyle: TextStyles.textGray14,
+                  //hintStyle: TextStyles.textGray14,
                 ),
               ),
             ),
             Container(
               alignment: Alignment.center,
-              child: const Text("至"),
+              child: const Text('至'),
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              color: Colors.white,
-              height: double.infinity),
+              color: ThemeUtils.getDialogBackgroundColor(context),
+              height: double.infinity
+            ),
             Expanded(
               child: TextField(
                 autofocus: true,
-                style: TextStyles.textDark14,
+                //style: TextStyles.textDark14,
                 controller: _controller1,
                 maxLines: 1,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 // 金额限制数字格式
                 inputFormatters: [UsNumberTextInputFormatter()],
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(top: 4.0, left: 16.0, right: 16.0, bottom: 4.0),
+                  contentPadding: const EdgeInsets.only(top: 0.0, left: 16.0, right: 16.0, bottom: 14.0),
                   border: InputBorder.none,
-                  hintStyle: TextStyles.textGray14,
+                  //hintStyle: TextStyles.textGray14,
                 ),
               ),
             ),
           ],
         ),
       ),
-      onPressed: (){
-        if (_controller.text.isEmpty || _controller1.text.isEmpty){
-          Toast.show("请输入${widget.title}");
+      onPressed: () {
+        if (_controller.text.isEmpty || _controller1.text.isEmpty) {
+          Toast.show('请输入${widget.title}');
           return;
         }
-        if (double.parse(_controller.text) >= double.parse(_controller1.text)){
-          Toast.show("最小金额不能大于最大金额!");
+        if (double.parse(_controller.text) >= double.parse(_controller1.text)) {
+          Toast.show('最小金额不能大于最大金额!');
           return;
         }
         NavigatorUtils.goBack(context);

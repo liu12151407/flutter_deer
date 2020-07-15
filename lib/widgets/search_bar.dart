@@ -1,136 +1,158 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_deer/res/resources.dart';
+import 'package:flutter_deer/util/theme_utils.dart';
 
 import 'load_image.dart';
 
-class SearchBar extends StatefulWidget implements PreferredSizeWidget{
+/// 搜索页的AppBar
+class SearchBar extends StatefulWidget implements PreferredSizeWidget {
 
   const SearchBar({
     Key key,
-    this.backgroundColor: Colors.white,
-    this.hintText: "",
-    this.backImg: "assets/images/ic_back_black.png",
+    this.hintText = '',
+    this.backImg = 'assets/images/ic_back_black.png',
     this.onPressed,
   }): super(key: key);
 
-  final Color backgroundColor;
   final String backImg;
   final String hintText;
   final Function(String) onPressed;
-  
+
   @override
   _SearchBarState createState() => _SearchBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(48.0);
+  Size get preferredSize => const Size.fromHeight(48.0);
 }
 
 class _SearchBarState extends State<SearchBar> {
 
-  SystemUiOverlayStyle overlayStyle = SystemUiOverlayStyle.light;
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focus = FocusNode();
 
-  Color getColor(){
-    return overlayStyle == SystemUiOverlayStyle.light ? Colors.white : Colours.text_dark;
+  @override
+  void dispose() {
+    _focus.dispose();
+    _controller.dispose();
+    super.dispose();
   }
   
   @override
   Widget build(BuildContext context) {
-    overlayStyle = ThemeData.estimateBrightnessForColor(widget.backgroundColor) == Brightness.dark
-        ? SystemUiOverlayStyle.light
-        : SystemUiOverlayStyle.dark;
+    final bool isDark = ThemeUtils.isDark(context);
+    final Color iconColor = isDark ? Colours.dark_text_gray : Colours.text_gray_c;
+    
+    Widget back = Semantics(
+      label: '返回',
+      child: SizedBox(
+        width: 48.0,
+        height: 48.0,
+        child: InkWell(
+          onTap: () {
+            _focus.unfocus();
+            Navigator.maybePop(context);
+          },
+          borderRadius: BorderRadius.circular(24.0),
+          child: Padding(
+            key: const Key('search_back'),
+            padding: const EdgeInsets.all(12.0),
+            child: Image.asset(
+              widget.backImg,
+              color: isDark ? Colours.dark_text : Colours.text,
+            ),
+          ),
+        ),
+      ),
+    );
+    
+    Widget textField = Expanded(
+      child: Container(
+        height: 32.0,
+        decoration: BoxDecoration(
+          color: isDark ? Colours.dark_material_bg : Colours.bg_gray,
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: TextField(
+          key: const Key('search_text_field'),
+//          autofocus: true,
+          controller: _controller,
+          focusNode: _focus,
+          maxLines: 1,
+          textInputAction: TextInputAction.search,
+          onSubmitted: (val) {
+            _focus.unfocus();
+            // 点击软键盘的动作按钮时的回调
+            widget.onPressed(val);
+          },
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(top: 0.0, left: -8.0, right: -16.0, bottom: 14.0),
+            border: InputBorder.none,
+            icon: Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),
+              child: LoadAssetImage('order/order_search', color: iconColor,),
+            ),
+            hintText: widget.hintText,
+            suffixIcon: GestureDetector(
+              child: Semantics(
+                label: '清空',
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8.0, bottom: 8.0),
+                  child: LoadAssetImage('order/order_delete', color: iconColor),
+                ),
+              ),
+              onTap: () {
+                /// https://github.com/flutter/flutter/issues/35848
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  _controller.text = '';
+                });
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    
+    Widget search = Theme(
+      data: Theme.of(context).copyWith(
+        buttonTheme: ButtonThemeData(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          height: 32.0,
+          minWidth: 44.0,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // 距顶部距离为0
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+      ),
+      child: FlatButton(
+        textColor: isDark ?  Colours.dark_button_text : Colors.white,
+        color: isDark ?  Colours.dark_app_main : Colours.app_main,
+        onPressed:() {
+          _focus.unfocus();
+          widget.onPressed(_controller.text);
+        },
+        child: Text('搜索', style: TextStyle(fontSize: Dimens.font_sp14)),
+      ),
+    );
+    
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: overlayStyle,
+      value: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
       child: Material(
-        color: widget.backgroundColor,
+        color: ThemeUtils.getBackgroundColor(context),
         child: SafeArea(
           child: Container(
-            color: widget.backgroundColor,
             child: Row(
               children: <Widget>[
-                SizedBox(
-                  width: 48.0,
-                  height: 48.0,
-                  child: InkWell(
-                    onTap: (){
-                      FocusScope.of(context).unfocus();
-                      Navigator.maybePop(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Image.asset(
-                        widget.backImg,
-                        color: getColor(),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 32.0,
-                    decoration: BoxDecoration(
-                      color: Colours.bg_gray,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: TextField(
-                      style: TextStyles.textDark14,
-                      autofocus: true,
-                      controller: _controller,
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(top: 6.0, left: -8.0, right: -16.0, bottom: 6.0),
-                        border: InputBorder.none,
-                        icon: Padding(
-                          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),
-                          child: const LoadAssetImage("order/order_search"),
-                        ),
-                        hintText: widget.hintText,
-                        hintStyle: TextStyles.textGrayC14,
-                        suffixIcon: InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0, top: 8.0, bottom: 8.0),
-                            child: const LoadAssetImage("order/order_delete"),
-                          ),
-                          onTap: (){
-                            /// https://github.com/flutter/flutter/issues/35909
-                            SchedulerBinding.instance.addPostFrameCallback((_) {
-                              _controller.text = "";
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                back,
+                textField,
                 Gaps.hGap8,
-                Theme(
-                  data: Theme.of(context).copyWith(
-                    buttonTheme: ButtonThemeData(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        height: 32.0,
-                        minWidth: 44.0,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // 距顶部距离为0
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                        )
-                    ),
-                  ),
-                  child: FlatButton(
-                      color: Colours.app_main,
-                      textColor: Colors.white,
-                      onPressed:(){
-                        widget.onPressed(_controller.text);
-                      },
-                      child: Text("搜索", style: TextStyle(fontSize: 14.0)),
-                  ),
-                ),
+                search,
                 Gaps.hGap16,
               ],
-            )
+            ),
           ),
         ),
       ),

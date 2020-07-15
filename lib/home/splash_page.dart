@@ -6,8 +6,9 @@ import 'package:flutter_deer/common/common.dart';
 import 'package:flutter_deer/login/login_router.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
 import 'package:flutter_deer/util/image_utils.dart';
-import 'package:flutter_deer/util/log_utils.dart';
+import 'package:flutter_deer/util/theme_utils.dart';
 import 'package:flutter_deer/widgets/load_image.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flustars/flustars.dart';
@@ -20,20 +21,21 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
 
   int _status = 0;
-  List<String> _guideList = ["app_start_1", "app_start_2", "app_start_3"];
+  final List<String> _guideList = ['app_start_1', 'app_start_2', 'app_start_3'];
   StreamSubscription _subscription;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Log.init();
+      /// 两种初始化方案，另一种见 main.dart
+      /// 两种方法各有优劣
       await SpUtil.getInstance();
-      if (SpUtil.getBool(Constant.key_guide, defValue: true)){
+      if (SpUtil.getBool(Constant.keyGuide, defValue: true)) {
         /// 预先缓存图片，避免直接使用时因为首次加载造成闪动
-        precacheImage(ImageUtils.getAssetImage("app_start_1"), context);
-        precacheImage(ImageUtils.getAssetImage("app_start_2"), context);
-        precacheImage(ImageUtils.getAssetImage("app_start_3"), context);
+        _guideList.forEach((image) {
+          precacheImage(ImageUtils.getAssetImage(image, format: ImageFormat.webp), context);
+        });
       }
       _initSplash();
     });
@@ -51,10 +53,10 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
-  void _initSplash(){
-    _subscription = Observable.just(1).delay(Duration(milliseconds: 1500)).listen((_){
-      if (SpUtil.getBool(Constant.key_guide, defValue: true)) {
-        SpUtil.putBool(Constant.key_guide, false);
+  void _initSplash() {
+    _subscription = Stream.value(1).delay(Duration(milliseconds: 1500)).listen((_) {
+      if (SpUtil.getBool(Constant.keyGuide, defValue: true)) {
+        SpUtil.putBool(Constant.keyGuide, false);
         _initGuide();
       } else {
         _goLogin();
@@ -62,31 +64,38 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
-  _goLogin(){
+  void _goLogin() {
     NavigatorUtils.push(context, LoginRouter.loginPage, replace: true);
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: _status == 0 ? Image.asset(
-        ImageUtils.getImgPath("start_page", format: "jpg"),
-        width: double.infinity,
-        fit: BoxFit.fill,
-        height: double.infinity,
-      ) : Swiper(
+      color: ThemeUtils.getBackgroundColor(context),
+      child: _status == 0 ? 
+      FractionallyAlignedSizedBox(
+        heightFactor: 0.3,
+        widthFactor: 0.33,
+        leftFactor: 0.33,
+        bottomFactor: 0,
+        child: const LoadAssetImage('logo')
+      ) :
+      Swiper(
+        key: const Key('swiper'),
         itemCount: _guideList.length,
         loop: false,
-        itemBuilder: (_, index){
+        itemBuilder: (_, index) {
           return LoadAssetImage(
             _guideList[index],
+            key: Key(_guideList[index]),
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
+            format: ImageFormat.webp,
           );
         },
-        onTap: (index){
-          if (index == _guideList.length - 1){
+        onTap: (index) {
+          if (index == _guideList.length - 1) {
             _goLogin();
           }
         },

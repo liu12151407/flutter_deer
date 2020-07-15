@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_deer/account/models/withdrawal_account_model.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/widgets/app_bar.dart';
+import 'package:flutter_deer/widgets/my_app_bar.dart';
 import 'package:flutter_deer/widgets/load_image.dart';
 
 import '../account_router.dart';
@@ -23,30 +23,24 @@ class _WithdrawalAccountListPageState extends State<WithdrawalAccountListPage> {
   void initState() {
     super.initState();
     _list.clear();
-    _list.add(WithdrawalAccountModel("尾号5236 李艺", "工商银行", 0, "123"));
-    _list.add(WithdrawalAccountModel("唯鹿", "微信", 1, ""));
+    _list.add(WithdrawalAccountModel('尾号5236 李艺', '工商银行', 0, '123'));
+    _list.add(WithdrawalAccountModel('唯鹿', '微信', 1, ''));
   }
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        centerTitle: "选择账号",
-        actionName: "添加",
-        onPressed: (){
-          NavigatorUtils.push(context, AccountRouter.addWithdrawalAccountPage);
-        }
+        centerTitle: '选择账号',
+        actionName: '添加',
+        onPressed: () => NavigatorUtils.push(context, AccountRouter.addWithdrawalAccountPage)
       ),
       body: ListView.separated(
         itemCount: _list.length,
-        separatorBuilder: (_, index) {
-          return Divider(height: 0.6);
-        },
-        itemBuilder: (_, index){
+        separatorBuilder: (_, index) => Divider(height: 0.6),
+        itemBuilder: (_, index) {
           return InkWell(
-            onTap: (){
-              NavigatorUtils.goBackWithParams(context, _list[index]);
-            },
+            onTap: () => NavigatorUtils.goBackWithParams(context, _list[index]),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               width: double.infinity,
@@ -54,23 +48,23 @@ class _WithdrawalAccountListPageState extends State<WithdrawalAccountListPage> {
               alignment: Alignment.center,
               child: Row(
                 children: <Widget>[
-                  LoadAssetImage(_list[index].type == 0 ? "account/yhk" : "account/wechat", width: 24.0),
+                  LoadAssetImage(_list[index].type == 0 ? 'account/yhk' : 'account/wechat', width: 24.0),
                   Gaps.hGap16,
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(_list[index].typeName, style: TextStyles.textDark14),
+                        Text(_list[index].typeName),
                         Gaps.vGap8,
-                        Text(_list[index].name, style: TextStyles.textDark12),
+                        Text(_list[index].name, style: TextStyles.textSize12),
                       ],
                     ),
                   ),
-                  Offstage(
-                    offstage: _selectIndex != index,
+                  Visibility(
+                    visible: _selectIndex == index,
                     child: const LoadAssetImage(
-                      "account/selected",
+                      'account/selected',
                       height: 24.0,
                       width: 24.0,
                     ),

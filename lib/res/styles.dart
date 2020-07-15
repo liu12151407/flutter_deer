@@ -1,80 +1,77 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
 import 'dimens.dart';
 
 class TextStyles {
-  static const TextStyle textMain12 = const TextStyle(
+  
+  static const TextStyle textSize12 = TextStyle(
     fontSize: Dimens.font_sp12,
-    color: Colours.app_main,
   );
-  static const TextStyle textMain14 = const TextStyle(
-    fontSize: Dimens.font_sp14,
-    color: Colours.app_main,
-  );
-  static const TextStyle textNormal12 = const TextStyle(
-    fontSize: Dimens.font_sp12,
-    color: Colours.text_normal,
-  );
-  static const TextStyle textDark12 = const TextStyle(
-    fontSize: Dimens.font_sp12,
-    color: Colours.text_dark,
-  );
-  static const TextStyle textDark14 = const TextStyle(
-    fontSize: Dimens.font_sp14,
-    color: Colours.text_dark,
-  );
-  static const TextStyle textDark16 = const TextStyle(
+  static const TextStyle textSize16 = TextStyle(
     fontSize: Dimens.font_sp16,
-    color: Colours.text_dark,
   );
-  static const TextStyle textBoldDark14 = const TextStyle(
-      fontSize: Dimens.font_sp14,
-      color: Colours.text_dark,
-      fontWeight: FontWeight.bold
-  );
-  static const TextStyle textBoldDark16 = const TextStyle(
-      fontSize: Dimens.font_sp16,
-      color: Colours.text_dark,
-      fontWeight: FontWeight.bold
-  );
-  static const TextStyle textBoldDark18 = const TextStyle(
-    fontSize: Dimens.font_sp18,
-    color: Colours.text_dark,
+  static const TextStyle textBold14 = TextStyle(
+    fontSize: Dimens.font_sp14,
     fontWeight: FontWeight.bold
   );
-  static const TextStyle textBoldDark24 = const TextStyle(
-      fontSize: 24.0,
-      color: Colours.text_dark,
-      fontWeight: FontWeight.bold
-  );
-  static const TextStyle textBoldDark26 = const TextStyle(
-      fontSize: 26.0,
-      color: Colours.text_dark,
-      fontWeight: FontWeight.bold
-  );
-  static const TextStyle textGray10 = const TextStyle(
-    fontSize: Dimens.font_sp10,
-    color: Colours.text_gray,
-  );
-  static const TextStyle textGray12 = const TextStyle(
-    fontSize: Dimens.font_sp12,
-    color: Colours.text_gray,
-  );
-  static const TextStyle textGray14 = const TextStyle(
-    fontSize: Dimens.font_sp14,
-    color: Colours.text_gray,
-  );
-  static const TextStyle textGray16 = const TextStyle(
+  static const TextStyle textBold16 = TextStyle(
     fontSize: Dimens.font_sp16,
+    fontWeight: FontWeight.bold
+  );
+  static const TextStyle textBold18 = TextStyle(
+    fontSize: Dimens.font_sp18,
+    fontWeight: FontWeight.bold
+  );
+  static const TextStyle textBold24 = TextStyle(
+    fontSize: 24.0,
+    fontWeight: FontWeight.bold
+  );
+  static const TextStyle textBold26 = TextStyle(
+    fontSize: 26.0,
+    fontWeight: FontWeight.bold
+  );
+ 
+  static const TextStyle textGray14 = TextStyle(
+    fontSize: Dimens.font_sp14,
     color: Colours.text_gray,
   );
-  static const TextStyle textGrayC12 = const TextStyle(
-    fontSize: Dimens.font_sp12,
-    color: Colours.text_gray_c,
-  );
-  static const TextStyle textGrayC14 = const TextStyle(
+  static const TextStyle textDarkGray14 = TextStyle(
     fontSize: Dimens.font_sp14,
-    color: Colours.text_gray_c,
+    color: Colours.dark_text_gray,
+  );
+
+  static const TextStyle textWhite14 = TextStyle(
+    fontSize: Dimens.font_sp14,
+    color: Colors.white,
+  );
+  
+  static const TextStyle text = TextStyle(
+    fontSize: Dimens.font_sp14,
+    color: Colours.text,
+    // https://github.com/flutter/flutter/issues/40248
+    textBaseline: TextBaseline.alphabetic
+  );
+  static const TextStyle textDark = TextStyle(
+    fontSize: Dimens.font_sp14,
+    color: Colours.dark_text,
+    textBaseline: TextBaseline.alphabetic
+  );
+
+  static const TextStyle textGray12 = TextStyle(
+    fontSize: Dimens.font_sp12,
+    color: Colours.text_gray,
+    fontWeight: FontWeight.normal
+  );
+  static const TextStyle textDarkGray12 = TextStyle(
+    fontSize: Dimens.font_sp12,
+    color: Colours.dark_text_gray,
+    fontWeight: FontWeight.normal
+  );
+  
+  static const TextStyle textHint14 = TextStyle(
+    fontSize: Dimens.font_sp14,
+    color: Colours.dark_unselected_item_color
   );
 }
